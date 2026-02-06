@@ -16,12 +16,19 @@
 - Console logging and error tracking
 - DOM mutation observation
 
-### 🤖 **LLM-Powered Task Planning** ⭐ NEW
+### 🤖 **LLM-Powered Task Planning**
 - Convert natural language prompts to executable action plans
 - Supports OpenAI GPT-4, Anthropic Claude, and local models
 - Context-aware planning using exploration data
 - Automatic validation and confidence scoring
 - Interactive CLI for task planning
+
+### ⚡ **Task Execution** ⭐ NEW
+- Execute LLM-generated plans in real browsers
+- Automated form filling, clicking, navigation
+- Screenshot capture at each step
+- Outcome verification and error handling
+- Detailed execution reports
 
 ### 📊 **Agent-Ready Output**
 - Action library (all possible UI actions)
@@ -80,10 +87,28 @@ Then describe tasks in plain English:
 > Add product to cart and checkout
 ```
 
+### 4. Execute the Plan
+
+```bash
+# Execute the generated plan
+python execute_plan.py output/generated_plans/plan_submit_the_contact_form.json
+
+# Or with options
+python execute_plan.py plan.json --show-plan --headless
+```
+
+The executor will:
+- ✅ Open the browser
+- ✅ Execute each step (navigate, fill forms, click buttons)
+- ✅ Verify expected outcomes
+- ✅ Capture screenshots
+- ✅ Generate execution report
+
 ## Documentation
 
-- **[Quick Start Guide](QUICKSTART_PLANNER.md)** - Get started with the task planner in 5 minutes
-- **[Planner Guide](PLANNER_GUIDE.md)** - Complete documentation for the LLM task planner
+- **[Quick Start Guide](QUICKSTART_PLANNER.md)** - Get started in 5 minutes
+- **[Planner Guide](PLANNER_GUIDE.md)** - Complete guide for the LLM task planner
+- **[Executor Guide](EXECUTOR_GUIDE.md)** - Complete guide for task execution ⭐ NEW
 - **[Configuration](config.py)** - All configuration options
 
 ## Architecture
@@ -96,7 +121,7 @@ Then describe tasks in plain English:
                    │
                    ▼
 ┌─────────────────────────────────────────────────────┐
-│            LLM Task Planner (NEW)                    │
+│            LLM Task Planner                          │
 │  • Context building from exploration data            │
 │  • LLM-powered plan generation                       │
 │  • Plan validation and optimization                  │
@@ -110,9 +135,18 @@ Then describe tasks in plain English:
 │  • Expected outcomes & verification                  │
 └──────────────────┬──────────────────────────────────┘
                    │
-                   ▼ (Coming Soon: Task Executor)
+                   ▼
 ┌─────────────────────────────────────────────────────┐
-│         Exploration Engine (Existing)                │
+│          Task Executor (NEW)                         │
+│  • Executes plans in real browser                   │
+│  • Handles navigation, clicks, forms                │
+│  • Verifies outcomes automatically                  │
+│  • Captures screenshots & reports                   │
+└──────────────────┬──────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────┐
+│         Exploration Engine                           │
 │  • Playwright browser automation                     │
 │  • Comprehensive data extraction                     │
 │  • Multi-format output generation                    │
@@ -124,29 +158,37 @@ Then describe tasks in plain English:
 ```
 colt/
 ├── explorer.py              # Main exploration orchestrator
-├── planner_cli.py          # Task planner CLI (NEW)
+├── planner_cli.py          # Task planner CLI
+├── execute_plan.py         # Plan executor CLI ⭐ NEW
 ├── config.py               # Configuration settings
 ├── requirements.txt        # Python dependencies
 ├── run.sh                  # Quick start script
 ├── test.py                 # Test suite for explorer
-├── test_planner.py        # Test suite for planner (NEW)
+├── test_planner.py        # Test suite for planner
+├── test_executor.py       # Test suite for executor ⭐ NEW
 │
 ├── src/
 │   ├── analyzers/          # Text analysis, agent preparation
 │   ├── extractors/         # DOM extraction
 │   ├── memory/            # Memory management (future)
 │   ├── monitors/          # Network, console, interactions, DOM
-│   ├── planner/           # LLM task planner (NEW)
+│   ├── planner/           # LLM task planner
 │   │   ├── context_builder.py
 │   │   ├── llm_client.py
 │   │   └── task_planner.py
+│   ├── executor/          # Task executor ⭐ NEW
+│   │   ├── task_executor.py
+│   │   ├── action_handlers.py
+│   │   └── verification.py
 │   └── utils/             # Crawling, forms, interactions, formatting
 │
-└── output/                # Generated exploration data
+└── output/                # Generated data
     ├── agent_data.json
     ├── action_library.json
     ├── api_map.json
     ├── state_machine.json
     ├── user_flows.json
-    └── generated_plans/  # LLM-generated plans (NEW)
+    ├── generated_plans/    # LLM-generated plans
+    ├── execution_screenshots/  # Step-by-step screenshots ⭐ NEW
+    └── execution_reports/     # Execution results ⭐ NEW
 ```
