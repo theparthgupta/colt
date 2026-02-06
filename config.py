@@ -199,3 +199,28 @@ class Config:
     DETECT_CRUD_OPERATIONS = True  # Identify Create/Read/Update/Delete
     DETECT_VALIDATION_RULES = True  # Extract validation patterns
     DETECT_ERROR_PATTERNS = True  # Common error scenarios
+
+    # ========================================
+    # LLM TASK PLANNER CONFIGURATION
+    # ========================================
+
+    # LLM Provider settings
+    LLM_PROVIDER = "openai"  # Options: "openai", "anthropic", "local"
+    LLM_MODEL = None  # None = use provider default, or specify: "gpt-4-turbo-preview", "claude-3-5-sonnet-20241022", etc.
+    LLM_API_KEY = None  # None = use environment variables (OPENAI_API_KEY or ANTHROPIC_API_KEY)
+    LLM_BASE_URL = None  # For local models (e.g., "http://localhost:11434" for Ollama)
+
+    # Generation parameters
+    LLM_TEMPERATURE = 0.7  # 0.0 = deterministic, 1.0 = creative
+    LLM_MAX_TOKENS = 2000  # Maximum tokens for LLM response
+    LLM_CONTEXT_WINDOW = 8000  # Maximum context tokens to send to LLM
+
+    # Planning settings
+    PLANNER_MAX_RELEVANT_ACTIONS = 10  # Max actions to include in context
+    PLANNER_MAX_RELEVANT_PAGES = 5  # Max pages to include in context
+    PLANNER_MAX_RELEVANT_FLOWS = 3  # Max user flows to include in context
+    PLANNER_MAX_API_ENDPOINTS = 5  # Max API endpoints to include in context
+
+    # Output settings
+    SAVE_GENERATED_PLANS = True  # Save plans to output/generated_plans/
+    AUTO_VALIDATE_PLANS = True  # Automatically validate plans against action library
