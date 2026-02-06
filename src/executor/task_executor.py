@@ -67,7 +67,7 @@ class TaskExecutor:
         self.action_handlers = ActionHandlers(self.page, self.timeout)
         self.verifier = Verifier(self.page)
 
-        print(f"✓ Browser initialized (headless={self.headless})")
+        print(f"[OK] Browser initialized (headless={self.headless})")
 
     async def cleanup(self):
         """Clean up browser resources"""
@@ -78,7 +78,7 @@ class TaskExecutor:
         if self.playwright:
             await self.playwright.stop()
 
-        print("✓ Browser cleaned up")
+        print("[OK] Browser cleaned up")
 
     async def execute_plan(self, plan: Dict[str, Any], save_report: bool = True) -> Dict[str, Any]:
         """
@@ -131,7 +131,7 @@ class TaskExecutor:
                 execution_result['step_results'].append(step_result)
 
                 if not step_result['success']:
-                    print(f"  ✗ Step failed: {step_result.get('error', 'Unknown error')}")
+                    print(f"  X Step failed: {step_result.get('error', 'Unknown error')}")
                     execution_result['errors'].append({
                         'step': step_num,
                         'error': step_result.get('error'),
@@ -140,10 +140,10 @@ class TaskExecutor:
 
                     # Decide whether to continue or stop
                     if step_result.get('fatal', False):
-                        print(f"\n✗ Fatal error in step {step_num}. Stopping execution.")
+                        print(f"\nX Fatal error in step {step_num}. Stopping execution.")
                         break
                 else:
-                    print(f"  ✓ Step completed successfully")
+                    print(f"  [OK] Step completed successfully")
                     execution_result['steps_executed'] += 1
 
                 # Brief pause between steps
@@ -159,9 +159,9 @@ class TaskExecutor:
 
             print("\n" + "=" * 60)
             if execution_result['success']:
-                print("✓ PLAN EXECUTED SUCCESSFULLY")
+                print("[OK] PLAN EXECUTED SUCCESSFULLY")
             else:
-                print(f"✗ PLAN EXECUTION FAILED")
+                print(f"X PLAN EXECUTION FAILED")
                 print(f"  Executed: {execution_result['steps_executed']}/{execution_result['steps_total']} steps")
                 print(f"  Errors: {len(execution_result['errors'])}")
             print("=" * 60)
@@ -173,7 +173,7 @@ class TaskExecutor:
                 'error': str(e),
                 'fatal': True
             })
-            print(f"\n✗ Execution error: {str(e)}")
+            print(f"\nX Execution error: {str(e)}")
 
         finally:
             # Save report if requested
@@ -289,7 +289,7 @@ class TaskExecutor:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        print(f"\n✓ Execution report saved: {file_path}")
+        print(f"\n[OK] Execution report saved: {file_path}")
 
     def load_plan(self, plan_path: str) -> Dict[str, Any]:
         """Load a plan from JSON file"""
@@ -321,7 +321,7 @@ class TaskExecutor:
         for step_result in execution_result['step_results']:
             step_num = step_result['step_number']
             action_type = step_result['action_type']
-            success = '✓' if step_result['success'] else '✗'
+            success = '[OK]' if step_result['success'] else 'X'
 
             print(f"  {success} Step {step_num}: {action_type.upper()}")
 

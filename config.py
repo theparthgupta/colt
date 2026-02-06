@@ -4,7 +4,7 @@ Configuration settings for the website explorer
 
 class Config:
     # Target website settings
-    BASE_URL = "http://localhost:3000"
+    BASE_URL = "http://localhost:3000"  # Configure this to your application URL
     
     # Crawler settings
     MAX_PAGES = 50  # Maximum number of pages to explore
